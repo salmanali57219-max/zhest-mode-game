@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0b0c">
+  <title>Zhest Mode — Game Hub</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #09090a;
+      --card: #121214;
+      --card-2: #171719;
+      --line: rgba(255,255,255,.08);
+      --text: #f5f3ef;
+      --muted: #8d8b88;
+      --gold: #d6b36a;
+      --gold-light: #ead29a;
+      --green: #55c98b;
+      --red: #ef6b6b;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 80% 0%, rgba(214,179,106,.08), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      min-height: 100vh;
+      margin: auto;
+      padding-bottom: 100px;
+    }
+
+    /* HEADER */
+
+    .topbar {
+      padding: 22px 20px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--gold-light);
+      direction: ltr;
+    }
+
+    .profile-mini {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card);
+      font-size: 15px;
+    }
+
+    /* HERO */
+
+    .hero {
+      padding: 20px;
+    }
+
+    .hello {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .hero h1 {
+      font-size: 27px;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .hero h1 span {
+      color: var(--gold-light);
+    }
+
+    /* SCORE CARD */
+
+    .score-card {
+      margin: 5px 20px 20px;
+      padding: 22px;
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.015)),
+        var(--card);
+      border: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .score-card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(214,179,106,.07);
+      left: -60px;
+      top: -70px;
+      filter: blur(5px);
+    }
+
+    .score-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .score-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .rank {
+      direction: ltr;
+      color: var(--gold-light);
+      font-size: 13px;
+    }
+
+    .score-number {
+      direction: ltr;
+      font-size: 39px;
+      font-weight: 800;
+      margin-top: 8px;
+      letter-spacing: -1px;
+    }
+
+    .score-number small {
+      font-size: 15px;
+      color: var(--gold);
+      margin-left: 5px;
+      font-weight: 500;
+    }
+
+    .progress-wrap {
+      margin-top: 17px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      width: 100%;
+      height: 5px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.08);
+      overflow: hidden;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 72%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: inherit;
+    }
+
+    /* DAILY GAME */
+
+    .section {
+      padding: 0 20px;
+      margin-top: 27px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .section-link {
+      color: var(--gold);
+      font-size: 11px;
+    }
+
+    .game-card {
+      min-height: 190px;
+      border-radius: 25px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(
+          90deg,
+          rgba(0,0,0,.96) 0%,
+          rgba(0,0,0,.68) 48%,
+          rgba(0,0,0,.15) 100%
+        ),
+        linear-gradient(135deg, #292521, #111);
+    }
+
+    .game-art {
+      position: absolute;
+      inset: 0;
+      opacity: .35;
+      background:
+        radial-gradient(circle at 75% 45%, rgba(214,179,106,.7), transparent 18%),
+        radial-gradient(circle at 82% 75%, rgba(255,255,255,.18), transparent 15%);
+    }
+
+    .hanger {
+      position: absolute;
+      right: 25px;
+      top: 25px;
+      width: 125px;
+      height: 125px;
+      border: 2px solid rgba(234,210,154,.55);
+      border-radius: 50% 50% 48% 48%;
+      transform: rotate(-9deg);
+      opacity: .8;
+    }
+
+    .hanger::before {
+      content: "";
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      border: 2px solid rgba(234,210,154,.55);
+      border-radius: 50%;
+      top: -16px;
+      left: 47px;
+      border-bottom-color: transparent;
+    }
+
+    .game-content {
+      position: relative;
+      z-index: 2;
+      padding: 23px;
+      max-width: 290px;
+    }
+
+    .game-tag {
+      display: inline-flex;
+      padding: 6px 9px;
+      border-radius: 20px;
+      background: rgba(214,179,106,.13);
+      border: 1px solid rgba(214,179,106,.25);
+      color: var(--gold-light);
+      font-size: 10px;
+      margin-bottom: 12px;
+    }
+
+    .game-title {
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+
+    .game-desc {
+      color: #bbb8b3;
+      font-size: 11px;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .play-btn {
+      border: 0;
+      background: var(--text);
+      color: #111;
+      padding: 11px 20px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .play-btn:active {
+      transform: scale(.96);
+    }
+
+    /* LEVELS */
+
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .level {
+      min-height: 125px;
+      padding: 17px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .level-number {
+      font-size: 10px;
+      color: var(--muted);
+      direction: ltr;
+    }
+
+    .level-icon {
+      font-size: 22px;
+      margin: 9px 0 7px;
+    }
+
+    .level-name {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .level-status {
+      margin-top: 7px;
+      font-size: 9px;
+      color: var(--green);
+    }
+
+    .locked {
+      opacity: .52;
+    }
+
+    .locked .level-status {
+      color: var(--muted);
+    }
+
+    .lock {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      font-size: 12px;
+    }
+
+    /* REWARDS */
+
+    .reward-card {
+      padding: 17px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .reward-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .reward-icon {
+      width: 43px;
+      height: 43px;
+      border-radius: 14px;
+      background: rgba(214,179,106,.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+    }
+
+    .reward-title {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .reward-cost {
+      font-size: 10px;
+      color: var(--gold);
+      margin-top: 5px;
+      direction: ltr;
+    }
+
+    .reward-btn {
+      border: 1px solid rgba(214,179,106,.3);
+      color: var(--gold-light);
+      background: transparent;
+      border-radius: 11px;
+      padding: 8px 11px;
+      font-size: 9px;
+    }
+
+    /* NAV */
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 20;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(480px, calc(100% - 24px));
+      height: 67px;
+      background: rgba(18,18,20,.92);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--line);
+      border-radius: 23px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      box-shadow: 0 15px 40px rgba(0,0,0,.35);
+    }
+
+    .nav-item {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      font-size: 9px;
+    }
+
+    .nav-item span:first-child {
+      font-size: 18px;
+    }
+
+    .nav-item.active {
+      color: var(--gold-light);
+    }
+
+    /* TOAST */
+
+    .toast {
+      position: fixed;
+      z-index: 50;
+      left: 50%;
+      bottom: 95px;
+      transform: translate(-50%, 20px);
+      background: #f5f3ef;
+      color: #111;
+      padding: 12px 17px;
+      border-radius: 14px;
+      font-size: 11px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (min-width: 700px) {
+      body {
+        padding: 25px 0;
+      }
+
+      .app {
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        overflow: hidden;
+        min-height: calc(100vh - 50px);
+      }
+
+      .bottom-nav {
+        position: fixed;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">ZHEST MODE</div>
+    <div class="profile-mini">A</div>
+  </header>
+
+  <section class="hero">
+    <div class="hello">خوش برگشتی</div>
+    <h1>بازی کن، <span>استایلت رو بساز.</span></h1>
+  </section>
+
+  <section class="score-card">
+
+```
+<div class="score-top">
+  <div>
+    <div class="score-label">امتیاز فعلی</div>
+    <div class="score-number">
+      1,240
+      <small>COINS</small>
+    </div>
+  </div>
+
+  <div class="rank">
+    رتبه #24
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-info">
+    <span>تا باز شدن Level 2</span>
+    <span>72%</span>
+  </div>
+
+  <div class="progress">
+    <span></span>
+  </div>
+</div>
+```
+
+  </section>
+
+  <section class="section">
+
+```
+<div class="section-head">
+  <div class="section-title">بازی امروز</div>
+  <div class="section-link">Level 01</div>
+</div>
+
+<div class="game-card">
+
+  <div class="game-art"></div>
+  <div class="hanger"></div>
+
+  <div class="game-content">
+
+    <div class="game-tag">
+      60 ثانیه فرصت داری
+    </div>
+
+    <div class="game-title">
+      لباس‌ها رو نجات بده.
+    </div>
+
+    <div class="game-desc">
+      لباس‌ها دارن به سمت آب می‌افتن.
+      سریع حرکت کن و قبل از خیس شدن
+      روی رگال قرارشون بده.
+    </div>
+
+    <button class="play-btn" onclick="startGame()">
+      شروع بازی
+    </button>
+
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <section class="section">
+
+```
+<div class="section-head">
+  <div class="section-title">مراحل بازی</div>
+  <div class="section-link">4 LEVEL</div>
+</div>
+
+<div class="levels">
+
+  <div class="level">
+    <div class="level-number">LEVEL 01</div>
+    <div class="level-icon">👕</div>
+    <div class="level-name">نجات لباس‌ها</div>
+    <div class="level-status">● باز است</div>
+  </div>
+
+  <div class="level locked">
+    <div class="lock">🔒</div>
+    <div class="level-number">LEVEL 02</div>
+    <div class="level-icon">🔤</div>
+    <div class="level-name">کلمه‌ی استایل</div>
+    <div class="level-status">+15 لازم است</div>
+  </div>
+
+  <div class="level locked">
+    <div class="lock">🔒</div>
+    <div class="level-number">LEVEL 03</div>
+    <div class="level-icon">🧠</div>
+    <div class="level-name">حافظه فشن</div>
+    <div class="level-status">قفل است</div>
+  </div>
+
+  <div class="level locked">
+    <div class="lock">🔒</div>
+    <div class="level-number">LEVEL 04</div>
+    <div class="level-icon">◉</div>
+    <div class="level-name">چرخ شانس</div>
+    <div class="level-status">قفل است</div>
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <section class="section">
+
+```
+<div class="section-head">
+  <div class="section-title">جوایز</div>
+  <div class="section-link">مشاهده همه</div>
+</div>
+
+<div class="reward-card">
+
+  <div class="reward-left">
+
+    <div class="reward-icon">🚚</div>
+
+    <div>
+      <div class="reward-title">
+        ارسال رایگان
+      </div>
+
+      <div class="reward-cost">
+        900 COINS
+      </div>
+    </div>
+
+  </div>
+
+  <button class="reward-btn" onclick="showToast('فعلاً باید امتیازت بیشتر شود')">
+    900
+  </button>
+
+</div>
+```
+
+  </section>
+
+</div>
+
+<nav class="bottom-nav">
+
+  <button class="nav-item active" onclick="showToast('صفحه اصلی')">
+    <span>⌂</span>
+    <span>خانه</span>
+  </button>
+
+  <button class="nav-item" onclick="startGame()">
+    <span>◉</span>
+    <span>بازی</span>
+  </button>
+
+  <button class="nav-item" onclick="showToast('بخش جوایز به‌زودی')">
+    <span>✦</span>
+    <span>جوایز</span>
+  </button>
+
+  <button class="nav-item" onclick="showToast('پروفایل به‌زودی')">
+    <span>○</span>
+    <span>پروفایل</span>
+  </button>
+
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+  function startGame() {
+    showToast("Level 1 در حال آماده‌سازی است...");
+  }
+
+  function showToast(message) {
+
+    const toast = document.getElementById("toast");
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2200);
+
+  }
+
+</script>
+
+</body>
+</html>
