@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="theme-color" content="#08090a">
+
+<title>Zhest Mode — Level 1</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+body{
+    background:#08090a;
+    color:#f5f3ef;
+    font-family:Tahoma,Arial,sans-serif;
+    touch-action:none;
+}
+
+/* APP */
+
+.game{
+    position:relative;
+    width:100%;
+    max-width:520px;
+    height:100dvh;
+    margin:auto;
+    overflow:hidden;
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(214,179,106,.08),
+            transparent 35%
+        ),
+        #08090a;
+}
+
+/* HEADER */
+
+.header{
+    position:absolute;
+    z-index:20;
+    top:0;
+    left:0;
+    width:100%;
+    padding:18px 18px 10px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.back{
+    width:38px;
+    height:38px;
+
+    border-radius:13px;
+
+    border:1px solid rgba(255,255,255,.09);
+
+    background:rgba(18,18,20,.8);
+
+    color:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:18px;
+
+    cursor:pointer;
+}
+
+.timer{
+    min-width:90px;
+
+    padding:10px 15px;
+
+    border-radius:14px;
+
+    background:rgba(18,18,20,.9);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    text-align:center;
+
+    font-size:14px;
+
+    direction:ltr;
+}
+
+.timer.warning{
+    color:#ef6b6b;
+    border-color:rgba(239,107,107,.35);
+}
+
+.score-box{
+    text-align:left;
+    direction:ltr;
+}
+
+.score-label{
+    color:#777;
+    font-size:9px;
+    margin-bottom:2px;
+}
+
+.score{
+    font-size:19px;
+    font-weight:800;
+}
+
+/* GAME AREA */
+
+.play-area{
+    position:absolute;
+    top:72px;
+    bottom:0;
+    left:0;
+    width:100%;
+
+    overflow:hidden;
+}
+
+/* BACKGROUND */
+
+.background{
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.015),
+            transparent 45%,
+            rgba(0,0,0,.25)
+        );
+}
+
+/* LIGHT */
+
+.light{
+    position:absolute;
+
+    width:260px;
+    height:260px;
+
+    border-radius:50%;
+
+    top:30px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    background:rgba(214,179,106,.055);
+
+    filter:blur(20px);
+}
+
+/* CLOTHING ZONE */
+
+.clothes-zone{
+    position:absolute;
+
+    top:30px;
+    left:0;
+
+    width:100%;
+    height:62%;
+
+    overflow:hidden;
+}
+
+/* WATER */
+
+.water{
+    position:absolute;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+    height:29%;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(20,28,30,.2),
+            rgba(4,10,12,.95)
+        );
+
+    border-top:
+        1px solid
+        rgba(214,179,106,.12);
+}
+
+.water::before{
+    content:"";
+
+    position:absolute;
+
+    top:13px;
+    left:-20%;
+
+    width:140%;
+    height:35px;
+
+    border-top:
+        1px solid
+        rgba(214,179,106,.25);
+
+    border-radius:50%;
+
+    animation:
+        wave 3s linear infinite;
+}
+
+.water-text{
+    position:absolute;
+
+    bottom:19px;
+
+    width:100%;
+
+    text-align:center;
+
+    color:rgba(255,255,255,.2);
+
+    font-size:9px;
+
+    letter-spacing:4px;
+
+    direction:ltr;
+}
+
+@keyframes wave{
+
+    0%{
+        transform:translateX(-5%);
+    }
+
+    50%{
+        transform:translateX(5%);
+    }
+
+    100%{
+        transform:translateX(-5%);
+    }
+
+}
+
+/* RACK */
+
+.rack-area{
+    position:absolute;
+
+    left:0;
+    bottom:28%;
+
+    width:100%;
+
+    height:110px;
+
+    z-index:8;
+
+    pointer-events:none;
+}
+
+.rack{
+    position:absolute;
+
+    left:50%;
+
+    bottom:20px;
+
+    transform:translateX(-50%);
+
+    width:180px;
+    height:6px;
+
+    background:#d6b36a;
+
+    border-radius:10px;
+
+    box-shadow:
+        0 0 20px rgba(214,179,106,.15);
+}
+
+.rack::before,
+.rack::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:4px;
+    height:75px;
+
+    bottom:-70px;
+
+    background:#b8924e;
+
+    border-radius:10px;
+}
+
+.rack::before{
+    left:20px;
+}
+
+.rack::after{
+    right:20px;
+}
+
+.rack-floor{
+    position:absolute;
+
+    left:50%;
+
+    bottom:-57px;
+
+    transform:translateX(-50%);
+
+    width:140px;
+
+    height:4px;
+
+    background:#8f723f;
+
+    border-radius:10px;
+}
+
+/* PLAYER */
+
+.player{
+    position:absolute;
+
+    z-index:12;
+
+    bottom:30%;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    width:105px;
+    height:55px;
+
+    cursor:grab;
+
+    touch-action:none;
+}
+
+.player.dragging{
+    cursor:grabbing;
+}
+
+.player-body{
+
+    position:absolute;
+
+    width:105px;
+    height:35px;
+
+    left:0;
+    top:15px;
+
+    border:
+
+        1px solid
+        rgba(234,210,154,.5);
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #d6b36a,
+            #9e7938
+        );
+
+    clip-path:
+
+        polygon(
+            10% 20%,
+            35% 0%,
+            50% 25%,
+            65% 0%,
+            90% 20%,
+            100% 100%,
+            0% 100%
+        );
+
+    box-shadow:
+
+        0 8px 25px
+        rgba(0,0,0,.4);
+}
+
+.player-hook{
+
+    position:absolute;
+
+    width:25px;
+    height:20px;
+
+    border:
+        3px solid
+        #d6b36a;
+
+    border-bottom-color:transparent;
+
+    border-radius:50%;
+
+    top:0;
+    left:40px;
+}
+
+/* CLOTHING ITEM */
+
+.clothing{
+
+    position:absolute;
+
+    z-index:6;
+
+    width:64px;
+    height:70px;
+
+    cursor:pointer;
+
+    user-select:none;
+
+    filter:
+        drop-shadow(
+            0 8px 10px
+            rgba(0,0,0,.45)
+        );
+
+    animation:
+        floatCloth 1.8s ease-in-out infinite;
+}
+
+.clothing .cloth-body{
+
+    position:absolute;
+
+    width:58px;
+    height:62px;
+
+    left:3px;
+    top:8px;
+
+    clip-path:
+
+        polygon(
+            27% 0,
+            42% 12%,
+            58% 12%,
+            73% 0,
+            100% 22%,
+            80% 48%,
+            74% 100%,
+            26% 100%,
+            20% 48%,
+            0 22%
+        );
+
+    background:#eee;
+
+}
+
+.clothing.gold .cloth-body{
+    background:#c9a35b;
+}
+
+.clothing.white .cloth-body{
+    background:#eee9df;
+}
+
+.clothing.black .cloth-body{
+    background:#292929;
+}
+
+.clothing.burgundy .cloth-body{
+    background:#713b43;
+}
+
+.clothing.green .cloth-body{
+    background:#65705d;
+}
+
+.clothing .hanger{
+
+    position:absolute;
+
+    width:22px;
+    height:18px;
+
+    border:
+        2px solid
+        rgba(230,210,170,.7);
+
+    border-bottom-color:transparent;
+
+    border-radius:50%;
+
+    left:21px;
+    top:0;
+}
+
+@keyframes floatCloth{
+
+    0%,
+    100%{
+        transform:rotate(-3deg);
+    }
+
+    50%{
+        transform:rotate(3deg);
+    }
+
+}
+
+/* SCORE POP */
+
+.score-pop{
+
+    position:absolute;
+
+    z-index:30;
+
+    pointer-events:none;
+
+    font-size:17px;
+
+    font-weight:900;
+
+    animation:
+        scoreUp .8s ease-out forwards;
+
+    direction:ltr;
+}
+
+.score-pop.plus{
+    color:#55c98b;
+}
+
+.score-pop.minus{
+    color:#ef6b6b;
+}
+
+@keyframes scoreUp{
+
+    0%{
+        opacity:0;
+        transform:
+            translateY(10px)
+            scale(.7);
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+        transform:
+            translateY(-45px)
+            scale(1.1);
+    }
+
+}
+
+/* INTRO */
+
+.intro{
+
+    position:absolute;
+
+    z-index:40;
+
+    inset:0;
+
+    background:
+        rgba(5,6,7,.94);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:25px;
+
+    transition:.35s;
+}
+
+.intro.hidden{
+
+    opacity:0;
+
+    pointer-events:none;
+
+}
+
+.intro-card{
+
+    width:100%;
+
+    max-width:350px;
+
+    padding:30px 24px;
+
+    border-radius:27px;
+
+    background:#121214;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    text-align:center;
+
+}
+
+.intro-icon{
+
+    font-size:48px;
+
+    margin-bottom:16px;
+
+}
+
+.intro h1{
+
+    font-size:23px;
+
+    margin-bottom:10px;
+
+}
+
+.intro p{
+
+    color:#999;
+
+    font-size:11px;
+
+    line-height:2;
+
+}
+
+.start-btn{
+
+    width:100%;
+
+    margin-top:22px;
+
+    padding:14px;
+
+    border:0;
+
+    border-radius:15px;
+
+    background:#f5f3ef;
+
+    color:#111;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+}
+
+/* RESULT */
+
+.result{
+
+    position:absolute;
+
+    z-index:60;
+
+    inset:0;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:25px;
+
+    background:
+        rgba(5,6,7,.96);
+
+}
+
+.result.show{
+    display:flex;
+}
+
+.result-card{
+
+    width:100%;
+
+    max-width:360px;
+
+    text-align:center;
+
+    padding:30px 24px;
+
+    border-radius:28px;
+
+    background:#121214;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+.result-small{
+
+    color:#999;
+
+    font-size:11px;
+
+    margin-bottom:9px;
+
+}
+
+.result-title{
+
+    font-size:26px;
+
+    font-weight:900;
+
+    margin-bottom:20px;
+
+}
+
+.final-score{
+
+    font-size:58px;
+
+    font-weight:900;
+
+    direction:ltr;
+
+    color:#d6b36a;
+
+}
+
+.result-message{
+
+    margin-top:10px;
+
+    color:#aaa;
+
+    font-size:11px;
+
+    line-height:1.8;
+
+}
+
+.result-buttons{
+
+    display:flex;
+
+    gap:9px;
+
+    margin-top:25px;
+
+}
+
+.result-buttons button{
+
+    flex:1;
+
+    padding:13px;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    font-size:11px;
+
+}
+
+.retry{
+
+    background:#f5f3ef;
+
+    color:#111;
+
+    border:0;
+
+}
+
+.hub{
+
+    background:transparent;
+
+    color:#eee;
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="game">
+
+```
+<!-- HEADER -->
+
+<header class="header">
+
+    <button
+        class="back"
+        onclick="goBack()">
+
+        ‹
+
+    </button>
+
+    <div class="timer" id="timer">
+
+        60
+
+    </div>
+
+    <div class="score-box">
+
+        <div class="score-label">
+            SCORE
+        </div>
+
+        <div
+            class="score"
+            id="score">
+
+            0
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- GAME -->
+
+<main class="play-area">
+
+    <div class="background"></div>
+
+    <div class="light"></div>
+
+
+    <div
+        class="clothes-zone"
+        id="clothesZone">
+    </div>
+
+
+    <div class="rack-area">
+
+        <div class="rack">
+
+            <div class="rack-floor"></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="player" id="player">
+
+        <div class="player-hook"></div>
+
+        <div class="player-body"></div>
+
+    </div>
+
+
+    <div class="water">
+
+        <div class="water-text">
+            WATER
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- INTRO -->
+
+<div
+    class="intro"
+    id="intro">
+
+    <div class="intro-card">
+
+        <div class="intro-icon">
+            👕
+        </div>
+
+        <h1>
+            لباس‌ها رو نجات بده.
+        </h1>
+
+        <p>
+
+            لباس‌ها از بالا می‌افتن.
+            <br>
+            رگال رو حرکت بده و قبل از
+            رسیدن لباس به آب، نجاتش بده.
+
+            <br><br>
+
+            هر لباس موفق:
+            <strong>+1</strong>
+
+            <br>
+
+            هر لباس داخل آب:
+            <strong>-5</strong>
+
+            <br><br>
+
+            برای باز شدن Level 2
+            باید به <strong>+15</strong> برسی.
+
+        </p>
+
+        <button
+            class="start-btn"
+            onclick="startGame()">
+
+            شروع بازی
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- RESULT -->
+
+<div
+    class="result"
+    id="result">
+
+    <div class="result-card">
+
+        <div class="result-small">
+            LEVEL 01 COMPLETE
+        </div>
+
+        <div
+            class="result-title"
+            id="resultTitle">
+
+            پایان بازی
+
+        </div>
+
+        <div
+            class="final-score"
+            id="finalScore">
+
+            0
+
+        </div>
+
+        <div
+            class="result-message"
+            id="resultMessage">
+
+        </div>
+
+        <div class="result-buttons">
+
+            <button
+                class="retry"
+                onclick="restartGame()">
+
+                دوباره بازی کن
+
+            </button>
+
+            <button
+                class="hub"
+                onclick="goHub()">
+
+                بازگشت
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<script>
+
+/* =========================================
+   GAME VARIABLES
+========================================= */
+
+let score = 0;
+
+let timeLeft = 60;
+
+let timerInterval = null;
+
+let spawnInterval = null;
+
+let gameRunning = false;
+
+let clothingId = 0;
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const player =
+    document.getElementById("player");
+
+const clothesZone =
+    document.getElementById("clothesZone");
+
+const scoreElement =
+    document.getElementById("score");
+
+const timerElement =
+    document.getElementById("timer");
+
+const intro =
+    document.getElementById("intro");
+
+const result =
+    document.getElementById("result");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+const resultTitle =
+    document.getElementById("resultTitle");
+
+const resultMessage =
+    document.getElementById("resultMessage");
+
+
+/* =========================================
+   START
+========================================= */
+
+function startGame(){
+
+    intro.classList.add("hidden");
+
+    result.classList.remove("show");
+
+    resetGame();
+
+    gameRunning = true;
+
+    startTimer();
+
+    startSpawning();
+
+}
+
+
+/* =========================================
+   RESET
+========================================= */
+
+function resetGame(){
+
+    score = 0;
+
+    timeLeft = 60;
+
+    scoreElement.textContent = score;
+
+    timerElement.textContent = timeLeft;
+
+    timerElement.classList.remove("warning");
+
+    document
+        .querySelectorAll(".clothing")
+        .forEach(item => item.remove());
+
+    clearInterval(timerInterval);
+
+    clearInterval(spawnInterval);
+
+}
+
+
+/* =========================================
+   TIMER
+========================================= */
+
+function startTimer(){
+
+    timerInterval = setInterval(() => {
+
+        timeLeft--;
+
+        timerElement.textContent =
+            timeLeft;
+
+        if(timeLeft <= 10){
+
+            timerElement
+                .classList.add("warning");
+
+        }
+
+        if(timeLeft <= 0){
+
+            endGame();
+
+        }
+
+    },1000);
+
+}
+
+
+/* =========================================
+   SPAWN
+========================================= */
+
+function startSpawning(){
+
+    spawnClothing();
+
+    spawnInterval =
+        setInterval(() => {
+
+            if(gameRunning){
+
+                spawnClothing();
+
+            }
+
+        },850);
+
+}
+
+
+/* =========================================
+   CREATE CLOTHING
+========================================= */
+
+function spawnClothing(){
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "clothing";
+
+    const colors = [
+        "gold",
+        "white",
+        "black",
+        "burgundy",
+        "green"
+    ];
+
+    const randomColor =
+        colors[
+            Math.floor(
+                Math.random() *
+                colors.length
+            )
+        ];
+
+    item.classList.add(randomColor);
+
+    item.innerHTML = `
+
+        <div class="hanger"></div>
+
+        <div class="cloth-body"></div>
+
+    `;
+
+    item.dataset.id =
+        clothingId++;
+
+    const zoneWidth =
+        clothesZone.clientWidth;
+
+    const maxLeft =
+        Math.max(
+            10,
+            zoneWidth - 80
+        );
+
+    item.style.left =
+        Math.random() *
+        maxLeft +
+        "px";
+
+    item.style.top =
+        "-90px";
+
+    clothesZone.appendChild(item);
+
+    animateClothing(item);
+
+}
+
+
+/* =========================================
+   CLOTHING FALL
+========================================= */
+
+function animateClothing(item){
+
+    const startTime =
+        performance.now();
+
+    const duration =
+        3300 +
+        Math.random() * 1200;
+
+    const startTop = -90;
+
+    const endTop =
+        clothesZone.clientHeight + 30;
+
+    function move(now){
+
+        if(!item.isConnected){
+
+            return;
+
+        }
+
+        if(!gameRunning){
+
+            return;
+
+        }
+
+        const progress =
+            Math.min(
+                1,
+                (now - startTime) /
+                duration
+            );
+
+        const currentTop =
+            startTop +
+            (endTop - startTop) *
+            progress;
+
+        item.style.top =
+            currentTop + "px";
+
+        checkCatch(item);
+
+        if(progress >= 1){
+
+            missClothing(item);
+
+            return;
+
+        }
+
+        requestAnimationFrame(move);
+
+    }
+
+    requestAnimationFrame(move);
+
+}
+
+
+/* =========================================
+   CATCH DETECTION
+========================================= */
+
+function checkCatch(item){
+
+    if(!item.isConnected){
+
+        return;
+
+    }
+
+    const itemRect =
+        item.getBoundingClientRect();
+
+    const playerRect =
+        player.getBoundingClientRect();
+
+    const itemCenter =
+        itemRect.left +
+        itemRect.width / 2;
+
+    const playerLeft =
+        playerRect.left;
+
+    const playerRight =
+        playerRect.right;
+
+    const playerTop =
+        playerRect.top;
+
+    const playerBottom =
+        playerRect.bottom;
+
+    const verticalHit =
+        itemRect.bottom >= playerTop &&
+        itemRect.top <= playerBottom;
+
+    const horizontalHit =
+        itemCenter >= playerLeft &&
+        itemCenter <= playerRight;
+
+    if(
+        verticalHit &&
+        horizontalHit
+    ){
+
+        catchClothing(item);
+
+    }
+
+}
+
+
+/* =========================================
+   SUCCESS
+========================================= */
+
+function catchClothing(item){
+
+    if(!item.isConnected){
+
+        return;
+
+    }
+
+    const rect =
+        item.getBoundingClientRect();
+
+    createScorePop(
+        "+1",
+        rect.left,
+        rect.top,
+        true
+    );
+
+    item.remove();
+
+    updateScore(1);
+
+}
+
+
+/* =========================================
+   MISS
+========================================= */
+
+function missClothing(item){
+
+    if(!item.isConnected){
+
+        return;
+
+    }
+
+    const rect =
+        item.getBoundingClientRect();
+
+    createScorePop(
+        "-5",
+        rect.left,
+        window.innerHeight - 150,
+        false
+    );
+
+    item.remove();
+
+    updateScore(-5);
+
+}
+
+
+/* =========================================
+   SCORE
+========================================= */
+
+function updateScore(value){
+
+    score += value;
+
+    scoreElement.textContent =
+        score;
+
+}
+
+
+/* =========================================
+   SCORE POP
+========================================= */
+
+function createScorePop(
+    text,
+    x,
+    y,
+    positive
+){
+
+    const pop =
+        document.createElement("div");
+
+    pop.className =
+        "score-pop " +
+        (
+            positive
+            ? "plus"
+            : "minus"
+        );
+
+    pop.textContent =
+        text;
+
+    pop.style.left =
+        x + "px";
+
+    pop.style.top =
+        y + "px";
+
+    document.body.appendChild(pop);
+
+    setTimeout(() => {
+
+        pop.remove();
+
+    },800);
+
+}
+
+
+/* =========================================
+   END
+========================================= */
+
+function endGame(){
+
+    gameRunning = false;
+
+    clearInterval(timerInterval);
+
+    clearInterval(spawnInterval);
+
+    document
+        .querySelectorAll(".clothing")
+        .forEach(item => item.remove());
+
+    finalScore.textContent =
+        score;
+
+    if(score >= 15){
+
+        resultTitle.textContent =
+            "Level 2 باز شد!";
+
+        resultMessage.innerHTML =
+            "عالی بود. امتیازت به حد لازم رسید.<br>حالا آماده مرحله بعدی شو.";
+
+    }else{
+
+        resultTitle.textContent =
+            "هنوز تموم نشده.";
+
+        resultMessage.innerHTML =
+            "برای باز کردن Level 2 باید حداقل +15 امتیاز بگیری.<br>دوباره امتحان کن.";
+
+    }
+
+    result.classList.add("show");
+
+}
+
+
+/* =========================================
+   RESTART
+========================================= */
+
+function restartGame(){
+
+    result.classList.remove("show");
+
+    startGame();
+
+}
+
+
+/* =========================================
+   BACK
+========================================= */
+
+function goBack(){
+
+    if(
+        confirm(
+            "از بازی خارج می‌شوی؟"
+        )
+    ){
+
+        goHub();
+
+    }
+
+}
+
+
+function goHub(){
+
+    window.location.href =
+        "game.html";
+
+}
+
+
+/* =========================================
+   PLAYER CONTROL
+========================================= */
+
+let dragging = false;
+
+let playerOffsetX = 0;
+
+
+/* MOUSE */
+
+player.addEventListener(
+    "mousedown",
+    function(e){
+
+        dragging = true;
+
+        player.classList.add(
+            "dragging"
+        );
+
+        const rect =
+            player.getBoundingClientRect();
+
+        playerOffsetX =
+            e.clientX -
+            rect.left;
+
+    }
+);
+
+
+document.addEventListener(
+    "mousemove",
+    function(e){
+
+        if(!dragging){
+
+            return;
+
+        }
+
+        movePlayer(
+            e.clientX
+        );
+
+    }
+);
+
+
+document.addEventListener(
+    "mouseup",
+    function(){
+
+        dragging = false;
+
+        player.classList.remove(
+            "dragging"
+        );
+
+    }
+);
+
+
+/* TOUCH */
+
+player.addEventListener(
+    "touchstart",
+    function(e){
+
+        dragging = true;
+
+        const touch =
+            e.touches[0];
+
+        const rect =
+            player.getBoundingClientRect();
+
+        playerOffsetX =
+            touch.clientX -
+            rect.left;
+
+    },
+    {passive:false}
+);
+
+
+document.addEventListener(
+    "touchmove",
+    function(e){
+
+        if(!dragging){
+
+            return;
+
+        }
+
+        e.preventDefault();
+
+        const touch =
+            e.touches[0];
+
+        movePlayer(
+            touch.clientX
+        );
+
+    },
+    {passive:false}
+);
+
+
+document.addEventListener(
+    "touchend",
+    function(){
+
+        dragging = false;
+
+    }
+);
+
+
+/* =========================================
+   MOVE PLAYER
+========================================= */
+
+function movePlayer(clientX){
+
+    const gameRect =
+        document
+            .querySelector(".game")
+            .getBoundingClientRect();
+
+    const playerWidth =
+        player.offsetWidth;
+
+    let left =
+        clientX -
+        gameRect.left -
+        playerOffsetX;
+
+    const min =
+        5;
+
+    const max =
+        gameRect.width -
+        playerWidth -
+        5;
+
+    left =
+        Math.max(
+            min,
+            Math.min(
+                max,
+                left
+            )
+        );
+
+    player.style.left =
+        left + "px";
+
+    player.style.transform =
+        "none";
+
+}
+
+
+/* =========================================
+   INITIAL PLAYER
+========================================= */
+
+function positionPlayer(){
+
+    player.style.left =
+        "50%";
+
+    player.style.transform =
+        "translateX(-50%)";
+
+}
+
+positionPlayer();
+
+</script>
+
+</body>
+</html>
