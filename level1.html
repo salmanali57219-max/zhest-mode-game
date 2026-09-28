@@ -1,19 +1,11 @@
 <!DOCTYPE html>
-
 <html lang="fa" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<meta name="theme-color" content="#08090a">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Zhest Mode — Level 1</title>
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
@@ -26,1726 +18,1475 @@ body{
     width:100%;
     height:100%;
     overflow:hidden;
+    font-family:Arial, sans-serif;
 }
 
 body{
-    background:#08090a;
-    color:#f5f3ef;
-    font-family:Tahoma,Arial,sans-serif;
-    touch-action:none;
-}
-
-/* APP */
-
-.game{
-    position:relative;
-    width:100%;
-    max-width:520px;
-    height:100dvh;
-    margin:auto;
-    overflow:hidden;
     background:
-        radial-gradient(
-            circle at 50% 20%,
-            rgba(214,179,106,.08),
-            transparent 35%
-        ),
-        #08090a;
+        linear-gradient(
+            180deg,
+            #8ed8ff 0%,
+            #b9e8ff 42%,
+            #e9f8ff 100%
+        );
+    color:#111;
 }
 
-/* HEADER */
+/* =========================
+   SKY
+========================= */
 
-.header{
+.sky{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    z-index:0;
+}
+
+.sky-glow{
     position:absolute;
-    z-index:20;
+    width:420px;
+    height:420px;
+    border-radius:50%;
+    background:rgba(255,255,255,.38);
+    filter:blur(20px);
+    top:-170px;
+    right:-100px;
+}
+
+.sun{
+    position:absolute;
+    width:95px;
+    height:95px;
+    border-radius:50%;
+    background:#fff8c9;
+    box-shadow:
+        0 0 35px rgba(255,241,150,.8),
+        0 0 90px rgba(255,255,255,.6);
+    top:65px;
+    left:40px;
+}
+
+.cloud{
+    position:absolute;
+    background:rgba(255,255,255,.72);
+    border-radius:999px;
+    filter:blur(.2px);
+    opacity:.8;
+}
+
+.cloud:before,
+.cloud:after{
+    content:"";
+    position:absolute;
+    background:inherit;
+    border-radius:50%;
+}
+
+.cloud1{
+    width:190px;
+    height:45px;
+    top:120px;
+    left:-40px;
+}
+
+.cloud1:before{
+    width:75px;
+    height:75px;
+    left:30px;
+    top:-30px;
+}
+
+.cloud1:after{
+    width:90px;
+    height:90px;
+    right:25px;
+    top:-45px;
+}
+
+.cloud2{
+    width:230px;
+    height:50px;
+    top:270px;
+    right:-80px;
+    opacity:.55;
+}
+
+.cloud2:before{
+    width:85px;
+    height:85px;
+    left:45px;
+    top:-38px;
+}
+
+.cloud2:after{
+    width:70px;
+    height:70px;
+    right:35px;
+    top:-28px;
+}
+
+.cloud3{
+    width:160px;
+    height:38px;
+    top:48%;
+    left:-70px;
+    opacity:.45;
+}
+
+.cloud3:before{
+    width:65px;
+    height:65px;
+    left:25px;
+    top:-30px;
+}
+
+.cloud3:after{
+    width:65px;
+    height:65px;
+    right:25px;
+    top:-25px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.topbar{
+    position:fixed;
     top:0;
     left:0;
-    width:100%;
-    padding:18px 18px 10px;
-
+    right:0;
+    height:82px;
+    padding:16px;
+    z-index:30;
     display:flex;
-    align-items:center;
     justify-content:space-between;
-}
-
-.back{
-    width:38px;
-    height:38px;
-
-    border-radius:13px;
-
-    border:1px solid rgba(255,255,255,.09);
-
-    background:rgba(18,18,20,.8);
-
-    color:#fff;
-
-    display:flex;
     align-items:center;
-    justify-content:center;
-
-    font-size:18px;
-
-    cursor:pointer;
 }
 
-.timer{
-    min-width:90px;
-
-    padding:10px 15px;
-
-    border-radius:14px;
-
-    background:rgba(18,18,20,.9);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    text-align:center;
-
+.brand{
     font-size:14px;
-
-    direction:ltr;
+    font-weight:900;
+    letter-spacing:2px;
+    color:#17212b;
+    background:rgba(255,255,255,.65);
+    backdrop-filter:blur(12px);
+    padding:10px 14px;
+    border-radius:14px;
+    box-shadow:0 8px 25px rgba(31,76,104,.12);
 }
 
-.timer.warning{
-    color:#ef6b6b;
-    border-color:rgba(239,107,107,.35);
+.stats{
+    display:flex;
+    gap:8px;
 }
 
-.score-box{
-    text-align:left;
-    direction:ltr;
+.stat{
+    min-width:74px;
+    padding:8px 10px;
+    border-radius:14px;
+    background:rgba(255,255,255,.72);
+    backdrop-filter:blur(12px);
+    text-align:center;
+    box-shadow:0 8px 25px rgba(31,76,104,.12);
 }
 
-.score-label{
-    color:#777;
+.stat small{
+    display:block;
     font-size:9px;
+    color:#667784;
     margin-bottom:2px;
 }
 
-.score{
-    font-size:19px;
-    font-weight:800;
+.stat strong{
+    font-size:16px;
 }
 
-/* GAME AREA */
+/* =========================
+   GAME AREA
+========================= */
 
-.play-area{
-    position:absolute;
-    top:72px;
-    bottom:0;
-    left:0;
-    width:100%;
-
-    overflow:hidden;
-}
-
-/* BACKGROUND */
-
-.background{
-    position:absolute;
+.game-area{
+    position:fixed;
     inset:0;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,.015),
-            transparent 45%,
-            rgba(0,0,0,.25)
-        );
-}
-
-/* LIGHT */
-
-.light{
-    position:absolute;
-
-    width:260px;
-    height:260px;
-
-    border-radius:50%;
-
-    top:30px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    background:rgba(214,179,106,.055);
-
-    filter:blur(20px);
-}
-
-/* CLOTHING ZONE */
-
-.clothes-zone{
-    position:absolute;
-
-    top:30px;
-    left:0;
-
-    width:100%;
-    height:62%;
-
+    z-index:5;
     overflow:hidden;
 }
 
-/* WATER */
+/* wind lines */
 
-.water{
+.wind{
     position:absolute;
-
-    bottom:0;
-    left:0;
-
-    width:100%;
-    height:29%;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(20,28,30,.2),
-            rgba(4,10,12,.95)
-        );
-
-    border-top:
-        1px solid
-        rgba(214,179,106,.12);
-}
-
-.water::before{
-    content:"";
-
-    position:absolute;
-
-    top:13px;
-    left:-20%;
-
-    width:140%;
-    height:35px;
-
-    border-top:
-        1px solid
-        rgba(214,179,106,.25);
-
-    border-radius:50%;
-
-    animation:
-        wave 3s linear infinite;
-}
-
-.water-text{
-    position:absolute;
-
-    bottom:19px;
-
-    width:100%;
-
-    text-align:center;
-
-    color:rgba(255,255,255,.2);
-
-    font-size:9px;
-
-    letter-spacing:4px;
-
-    direction:ltr;
-}
-
-@keyframes wave{
-
-    0%{
-        transform:translateX(-5%);
-    }
-
-    50%{
-        transform:translateX(5%);
-    }
-
-    100%{
-        transform:translateX(-5%);
-    }
-
-}
-
-/* RACK */
-
-.rack-area{
-    position:absolute;
-
-    left:0;
-    bottom:28%;
-
-    width:100%;
-
-    height:110px;
-
-    z-index:8;
-
+    width:110px;
+    height:2px;
+    background:rgba(255,255,255,.55);
+    border-radius:10px;
+    opacity:0;
     pointer-events:none;
 }
 
-.rack{
+.wind.w1{top:35%; left:-130px;}
+.wind.w2{top:48%; left:-170px;}
+.wind.w3{top:61%; left:-100px;}
+
+.wind.active{
+    opacity:1;
+    animation:windMove 2.2s linear infinite;
+}
+
+.w2.active{
+    animation-delay:.6s;
+}
+
+.w3.active{
+    animation-delay:1.2s;
+}
+
+@keyframes windMove{
+    from{
+        transform:translateX(0);
+    }
+    to{
+        transform:translateX(calc(100vw + 300px));
+    }
+}
+
+/* =========================
+   CLOTHES
+========================= */
+
+.clothing{
     position:absolute;
-
-    left:50%;
-
-    bottom:20px;
-
-    transform:translateX(-50%);
-
-    width:180px;
-    height:6px;
-
-    background:#d6b36a;
-
-    border-radius:10px;
-
-    box-shadow:
-        0 0 20px rgba(214,179,106,.15);
+    width:70px;
+    height:70px;
+    object-fit:contain;
+    pointer-events:none;
+    user-select:none;
+    z-index:12;
+    will-change:transform;
+    filter:drop-shadow(0 10px 9px rgba(0,0,0,.13));
 }
 
-.rack::before,
-.rack::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:4px;
-    height:75px;
-
-    bottom:-70px;
-
-    background:#b8924e;
-
-    border-radius:10px;
+.clothing.small{
+    width:55px;
+    height:55px;
 }
 
-.rack::before{
-    left:20px;
+.clothing.large{
+    width:86px;
+    height:86px;
 }
 
-.rack::after{
-    right:20px;
+.clothing.gold{
+    filter:
+        drop-shadow(0 0 8px rgba(255,203,70,.95))
+        drop-shadow(0 10px 10px rgba(0,0,0,.12));
 }
 
-.rack-floor{
-    position:absolute;
-
-    left:50%;
-
-    bottom:-57px;
-
-    transform:translateX(-50%);
-
-    width:140px;
-
-    height:4px;
-
-    background:#8f723f;
-
-    border-radius:10px;
+.clothing.evil{
+    filter:
+        drop-shadow(0 0 8px rgba(255,45,45,.85))
+        drop-shadow(0 10px 10px rgba(0,0,0,.18));
 }
 
-/* PLAYER */
+/* =========================
+   RACK
+========================= */
 
 .player{
     position:absolute;
-
-    z-index:12;
-
-    bottom:30%;
-
+    bottom:38px;
     left:50%;
-
-    transform:
-        translateX(-50%);
-
-    width:105px;
-    height:55px;
-
-    cursor:grab;
-
+    width:135px;
+    height:115px;
+    transform:translateX(-50%);
+    z-index:20;
     touch-action:none;
+    cursor:grab;
+    user-select:none;
+    transition:transform .16s ease-out;
 }
 
 .player.dragging{
     cursor:grabbing;
 }
 
-.player-body{
+.player img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    pointer-events:none;
+    filter:drop-shadow(0 13px 12px rgba(0,0,0,.2));
+}
 
+.rack-zone{
     position:absolute;
-
+    bottom:45px;
+    left:50%;
     width:105px;
-    height:35px;
-
-    left:0;
-    top:15px;
-
-    border:
-
-        1px solid
-        rgba(234,210,154,.5);
-
-    background:
-
-        linear-gradient(
-            180deg,
-            #d6b36a,
-            #9e7938
-        );
-
-    clip-path:
-
-        polygon(
-            10% 20%,
-            35% 0%,
-            50% 25%,
-            65% 0%,
-            90% 20%,
-            100% 100%,
-            0% 100%
-        );
-
-    box-shadow:
-
-        0 8px 25px
-        rgba(0,0,0,.4);
-}
-
-.player-hook{
-
-    position:absolute;
-
-    width:25px;
-    height:20px;
-
-    border:
-        3px solid
-        #d6b36a;
-
-    border-bottom-color:transparent;
-
+    height:55px;
+    transform:translateX(-50%);
     border-radius:50%;
-
-    top:0;
-    left:40px;
+    background:rgba(255,255,255,.12);
+    pointer-events:none;
 }
 
-/* CLOTHING ITEM */
-
-.clothing{
-
-    position:absolute;
-
-    z-index:6;
-
-    width:64px;
-    height:70px;
-
-    cursor:pointer;
-
-    user-select:none;
-
-    filter:
-        drop-shadow(
-            0 8px 10px
-            rgba(0,0,0,.45)
-        );
-
-    animation:
-        floatCloth 1.8s ease-in-out infinite;
-}
-
-.clothing .cloth-body{
-
-    position:absolute;
-
-    width:58px;
-    height:62px;
-
-    left:3px;
-    top:8px;
-
-    clip-path:
-
-        polygon(
-            27% 0,
-            42% 12%,
-            58% 12%,
-            73% 0,
-            100% 22%,
-            80% 48%,
-            74% 100%,
-            26% 100%,
-            20% 48%,
-            0 22%
-        );
-
-    background:#eee;
-
-}
-
-.clothing.gold .cloth-body{
-    background:#c9a35b;
-}
-
-.clothing.white .cloth-body{
-    background:#eee9df;
-}
-
-.clothing.black .cloth-body{
-    background:#292929;
-}
-
-.clothing.burgundy .cloth-body{
-    background:#713b43;
-}
-
-.clothing.green .cloth-body{
-    background:#65705d;
-}
-
-.clothing .hanger{
-
-    position:absolute;
-
-    width:22px;
-    height:18px;
-
-    border:
-        2px solid
-        rgba(230,210,170,.7);
-
-    border-bottom-color:transparent;
-
-    border-radius:50%;
-
-    left:21px;
-    top:0;
-}
-
-@keyframes floatCloth{
-
-    0%,
-    100%{
-        transform:rotate(-3deg);
-    }
-
-    50%{
-        transform:rotate(3deg);
-    }
-
-}
-
-/* SCORE POP */
+/* =========================
+   SCORE POP
+========================= */
 
 .score-pop{
-
     position:absolute;
-
-    z-index:30;
-
-    pointer-events:none;
-
-    font-size:17px;
-
+    z-index:50;
     font-weight:900;
-
-    animation:
-        scoreUp .8s ease-out forwards;
-
-    direction:ltr;
+    font-size:21px;
+    pointer-events:none;
+    animation:scoreFloat .85s ease forwards;
 }
 
 .score-pop.plus{
-    color:#55c98b;
+    color:#15803d;
+}
+
+.score-pop.gold{
+    color:#b77900;
 }
 
 .score-pop.minus{
-    color:#ef6b6b;
+    color:#d71920;
 }
 
-@keyframes scoreUp{
-
+@keyframes scoreFloat{
     0%{
         opacity:0;
-        transform:
-            translateY(10px)
-            scale(.7);
+        transform:translateY(10px) scale(.8);
     }
-
     20%{
         opacity:1;
+        transform:translateY(0) scale(1.05);
     }
-
     100%{
         opacity:0;
-        transform:
-            translateY(-45px)
-            scale(1.1);
+        transform:translateY(-55px) scale(1);
+    }
+}
+
+/* =========================
+   OVERLAYS
+========================= */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(28,66,87,.2);
+    backdrop-filter:blur(8px);
+}
+
+.panel{
+    width:min(430px,100%);
+    background:rgba(255,255,255,.88);
+    border:1px solid rgba(255,255,255,.9);
+    border-radius:28px;
+    padding:30px 22px;
+    text-align:center;
+    box-shadow:0 25px 80px rgba(23,65,87,.25);
+}
+
+.panel h1{
+    font-size:28px;
+    margin-bottom:12px;
+    color:#101820;
+}
+
+.panel p{
+    color:#60717d;
+    line-height:1.9;
+    font-size:14px;
+    margin-bottom:22px;
+}
+
+.btn{
+    width:100%;
+    border:none;
+    border-radius:16px;
+    padding:15px;
+    font-size:15px;
+    font-weight:800;
+    cursor:pointer;
+    background:#111820;
+    color:white;
+    box-shadow:0 12px 30px rgba(17,24,32,.2);
+}
+
+.btn.secondary{
+    margin-top:10px;
+    background:rgba(17,24,32,.08);
+    color:#17212b;
+    box-shadow:none;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* =========================
+   DIFFICULTY INDICATOR
+========================= */
+
+.difficulty{
+    position:fixed;
+    top:94px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:25;
+    background:rgba(255,255,255,.62);
+    backdrop-filter:blur(10px);
+    border-radius:999px;
+    padding:7px 13px;
+    font-size:10px;
+    color:#445762;
+    opacity:.9;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px){
+
+    .topbar{
+        height:76px;
+        padding:12px;
     }
 
+    .brand{
+        font-size:11px;
+        padding:8px 10px;
+    }
+
+    .stat{
+        min-width:64px;
+        padding:7px 8px;
+    }
+
+    .stat strong{
+        font-size:14px;
+    }
+
+    .player{
+        width:120px;
+        height:105px;
+        bottom:30px;
+    }
+
+    .clothing{
+        width:62px;
+        height:62px;
+    }
+
+    .clothing.small{
+        width:48px;
+        height:48px;
+    }
+
+    .clothing.large{
+        width:78px;
+        height:78px;
+    }
+
+    .difficulty{
+        top:86px;
+    }
 }
-
-/* INTRO */
-
-.intro{
-
-    position:absolute;
-
-    z-index:40;
-
-    inset:0;
-
-    background:
-        rgba(5,6,7,.94);
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:25px;
-
-    transition:.35s;
-}
-
-.intro.hidden{
-
-    opacity:0;
-
-    pointer-events:none;
-
-}
-
-.intro-card{
-
-    width:100%;
-
-    max-width:350px;
-
-    padding:30px 24px;
-
-    border-radius:27px;
-
-    background:#121214;
-
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
-    text-align:center;
-
-}
-
-.intro-icon{
-
-    font-size:48px;
-
-    margin-bottom:16px;
-
-}
-
-.intro h1{
-
-    font-size:23px;
-
-    margin-bottom:10px;
-
-}
-
-.intro p{
-
-    color:#999;
-
-    font-size:11px;
-
-    line-height:2;
-
-}
-
-.start-btn{
-
-    width:100%;
-
-    margin-top:22px;
-
-    padding:14px;
-
-    border:0;
-
-    border-radius:15px;
-
-    background:#f5f3ef;
-
-    color:#111;
-
-    font-weight:800;
-
-    cursor:pointer;
-
-}
-
-/* RESULT */
-
-.result{
-
-    position:absolute;
-
-    z-index:60;
-
-    inset:0;
-
-    display:none;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:25px;
-
-    background:
-        rgba(5,6,7,.96);
-
-}
-
-.result.show{
-    display:flex;
-}
-
-.result-card{
-
-    width:100%;
-
-    max-width:360px;
-
-    text-align:center;
-
-    padding:30px 24px;
-
-    border-radius:28px;
-
-    background:#121214;
-
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
-}
-
-.result-small{
-
-    color:#999;
-
-    font-size:11px;
-
-    margin-bottom:9px;
-
-}
-
-.result-title{
-
-    font-size:26px;
-
-    font-weight:900;
-
-    margin-bottom:20px;
-
-}
-
-.final-score{
-
-    font-size:58px;
-
-    font-weight:900;
-
-    direction:ltr;
-
-    color:#d6b36a;
-
-}
-
-.result-message{
-
-    margin-top:10px;
-
-    color:#aaa;
-
-    font-size:11px;
-
-    line-height:1.8;
-
-}
-
-.result-buttons{
-
-    display:flex;
-
-    gap:9px;
-
-    margin-top:25px;
-
-}
-
-.result-buttons button{
-
-    flex:1;
-
-    padding:13px;
-
-    border-radius:14px;
-
-    cursor:pointer;
-
-    font-size:11px;
-
-}
-
-.retry{
-
-    background:#f5f3ef;
-
-    color:#111;
-
-    border:0;
-
-}
-
-.hub{
-
-    background:transparent;
-
-    color:#eee;
-
-    border:
-        1px solid
-        rgba(255,255,255,.1);
-
-}
-
 </style>
-
 </head>
 
 <body>
 
-<div class="game">
+<!-- SKY -->
+<div class="sky">
+    <div class="sky-glow"></div>
+    <div class="sun"></div>
 
-```
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+</div>
+
 <!-- HEADER -->
+<header class="topbar">
 
-<header class="header">
-
-    <button
-        class="back"
-        onclick="goBack()">
-
-        ‹
-
-    </button>
-
-    <div class="timer" id="timer">
-
-        60
-
+    <div class="brand">
+        ZHEST MODE
     </div>
 
-    <div class="score-box">
+    <div class="stats">
 
-        <div class="score-label">
-            SCORE
+        <div class="stat">
+            <small>زمان</small>
+            <strong id="timer">60</strong>
         </div>
 
-        <div
-            class="score"
-            id="score">
-
-            0
-
+        <div class="stat">
+            <small>امتیاز</small>
+            <strong id="score">0</strong>
         </div>
 
     </div>
 
 </header>
 
+<div class="difficulty" id="difficulty">
+    مرحله ۱ · آماده شو
+</div>
 
 <!-- GAME -->
+<main class="game-area" id="gameArea">
 
-<main class="play-area">
+    <div class="wind w1"></div>
+    <div class="wind w2"></div>
+    <div class="wind w3"></div>
 
-    <div class="background"></div>
-
-    <div class="light"></div>
-
-
-    <div
-        class="clothes-zone"
-        id="clothesZone">
-    </div>
-
-
-    <div class="rack-area">
-
-        <div class="rack">
-
-            <div class="rack-floor"></div>
-
-        </div>
-
-    </div>
-
+    <div class="rack-zone"></div>
 
     <div class="player" id="player">
-
-        <div class="player-hook"></div>
-
-        <div class="player-body"></div>
-
-    </div>
-
-
-    <div class="water">
-
-        <div class="water-text">
-            WATER
-        </div>
-
+        <img src="assets/level1/rack.png" alt="Clothing Rack">
     </div>
 
 </main>
 
-
 <!-- INTRO -->
+<div class="overlay" id="intro">
 
-<div
-    class="intro"
-    id="intro">
+    <div class="panel">
 
-    <div class="intro-card">
-
-        <div class="intro-icon">
-            👕
-        </div>
-
-        <h1>
-            لباس‌ها رو نجات بده.
-        </h1>
+        <h1>لباس‌ها رو نجات بده.</h1>
 
         <p>
-
-            لباس‌ها از بالا می‌افتن.
-            <br>
-            رگال رو حرکت بده و قبل از
-            رسیدن لباس به آب، نجاتش بده.
-
+            لباس‌ها از آسمان سقوط می‌کنند.
+            رگال را حرکت بده و لباس‌ها را قبل از سقوط بگیر.
             <br><br>
-
-            هر لباس موفق:
-            <strong>+1</strong>
-
+            🟡 طلایی = +2
             <br>
-
-            هر لباس داخل آب:
-            <strong>-5</strong>
-
-            <br><br>
-
-            برای باز شدن Level 2
-            باید به <strong>+15</strong> برسی.
-
+            🔴 لباس شیطانی = -10
+            <br>
+            لباس معمولی = +1
+            <br>
+            سقوط لباس = -5
         </p>
 
-        <button
-            class="start-btn"
-            onclick="startGame()">
-
+        <button class="btn" id="startBtn">
             شروع بازی
-
         </button>
 
     </div>
 
 </div>
 
-
 <!-- RESULT -->
+<div class="overlay hidden" id="result">
 
-<div
-    class="result"
-    id="result">
+    <div class="panel">
 
-    <div class="result-card">
+        <h1 id="resultTitle">بازی تمام شد</h1>
 
-        <div class="result-small">
-            LEVEL 01 COMPLETE
-        </div>
+        <p id="resultText"></p>
 
-        <div
-            class="result-title"
-            id="resultTitle">
+        <button class="btn" id="replayBtn">
+            دوباره بازی کن
+        </button>
 
-            پایان بازی
-
-        </div>
-
-        <div
-            class="final-score"
-            id="finalScore">
-
-            0
-
-        </div>
-
-        <div
-            class="result-message"
-            id="resultMessage">
-
-        </div>
-
-        <div class="result-buttons">
-
-            <button
-                class="retry"
-                onclick="restartGame()">
-
-                دوباره بازی کن
-
-            </button>
-
-            <button
-                class="hub"
-                onclick="goHub()">
-
-                بازگشت
-
-            </button>
-
-        </div>
+        <button class="btn secondary" id="hubBtn">
+            بازگشت به Game Hub
+        </button>
 
     </div>
-
-</div>
-```
 
 </div>
 
 <script>
 
-/* =========================================
-   GAME VARIABLES
-========================================= */
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const GAME_DURATION = 60;
+
+const NORMAL_SCORE = 1;
+const GOLD_SCORE = 2;
+const EVIL_SCORE = -10;
+const MISS_SCORE = -5;
 
 let score = 0;
-
-let timeLeft = 60;
-
-let timerInterval = null;
-
-let spawnInterval = null;
+let timeLeft = GAME_DURATION;
 
 let gameRunning = false;
+let gameStarted = false;
 
-let clothingId = 0;
+let timerInterval = null;
+let spawnTimeout = null;
+
+let clothes = [];
+
+let rackX = window.innerWidth / 2;
+
+/* =========================================================
+   ASSETS
+========================================================= */
+
+const CLOTHING_TYPES = [
+
+    {
+        src:"assets/level1/tshirt.png",
+        type:"normal",
+        value:1,
+        size:"normal",
+        speed:1
+    },
+
+    {
+        src:"assets/level1/shirt.png",
+        type:"normal",
+        value:1,
+        size:"normal",
+        speed:1.08
+    },
+
+    {
+        src:"assets/level1/dress.png",
+        type:"normal",
+        value:1,
+        size:"large",
+        speed:.94
+    },
+
+    {
+        src:"assets/level1/jacket.png",
+        type:"normal",
+        value:1,
+        size:"large",
+        speed:1.15
+    },
+
+    {
+        src:"assets/level1/pants.png",
+        type:"normal",
+        value:1,
+        size:"normal",
+        speed:1.05
+    },
+
+    {
+        src:"assets/level1/hoodie.png",
+        type:"normal",
+        value:1,
+        size:"large",
+        speed:.98
+    },
+
+    /* GOLD */
+    {
+        src:"assets/level1/gold.png",
+        type:"gold",
+        value:2,
+        size:"normal",
+        speed:1.35
+    },
+
+    /* EVIL */
+    {
+        src:"assets/level1/evil-red.png",
+        type:"evil",
+        value:-10,
+        size:"normal",
+        speed:1.12
+    },
+
+    {
+        src:"assets/level1/evil-red.png",
+        type:"evil",
+        value:-10,
+        size:"small",
+        speed:1.25
+    }
+
+];
 
 
-/* =========================================
-   ELEMENTS
-========================================= */
+/* =========================================================
+   DOM
+========================================================= */
 
-const player =
-    document.getElementById("player");
+const gameArea = document.getElementById("gameArea");
+const player = document.getElementById("player");
 
-const clothesZone =
-    document.getElementById("clothesZone");
+const scoreEl = document.getElementById("score");
+const timerEl = document.getElementById("timer");
 
-const scoreElement =
-    document.getElementById("score");
+const intro = document.getElementById("intro");
+const result = document.getElementById("result");
 
-const timerElement =
-    document.getElementById("timer");
+const resultTitle = document.getElementById("resultTitle");
+const resultText = document.getElementById("resultText");
 
-const intro =
-    document.getElementById("intro");
+const difficultyEl = document.getElementById("difficulty");
 
-const result =
-    document.getElementById("result");
+const startBtn = document.getElementById("startBtn");
+const replayBtn = document.getElementById("replayBtn");
+const hubBtn = document.getElementById("hubBtn");
 
-const finalScore =
-    document.getElementById("finalScore");
-
-const resultTitle =
-    document.getElementById("resultTitle");
-
-const resultMessage =
-    document.getElementById("resultMessage");
+const winds = document.querySelectorAll(".wind");
 
 
-/* =========================================
-   START
-========================================= */
+/* =========================================================
+   RANDOM
+========================================================= */
 
-function startGame(){
-
-    intro.classList.add("hidden");
-
-    result.classList.remove("show");
-
-    resetGame();
-
-    gameRunning = true;
-
-    startTimer();
-
-    startSpawning();
-
+function random(min,max){
+    return Math.random() * (max-min) + min;
 }
 
 
-/* =========================================
-   RESET
-========================================= */
+/* =========================================================
+   DIFFICULTY
+========================================================= */
 
-function resetGame(){
+function getDifficulty(){
 
-    score = 0;
+    const elapsed = GAME_DURATION - timeLeft;
 
-    timeLeft = 60;
+    if(elapsed < 15){
 
-    scoreElement.textContent = score;
+        return {
+            speed:1,
+            spawn:2200,
+            label:"مرحله ۱ · آرام"
+        };
 
-    timerElement.textContent = timeLeft;
+    }
 
-    timerElement.classList.remove("warning");
+    if(elapsed < 30){
 
-    document
-        .querySelectorAll(".clothing")
-        .forEach(item => item.remove());
+        return {
+            speed:1.25,
+            spawn:2000,
+            label:"مرحله ۱ · سریع‌تر"
+        };
 
-    clearInterval(timerInterval);
+    }
 
-    clearInterval(spawnInterval);
+    if(elapsed < 45){
 
+        return {
+            speed:1.55,
+            spawn:1800,
+            label:"مرحله ۱ · سخت"
+        };
+
+    }
+
+    return {
+        speed:1.9,
+        spawn:1550,
+        label:"مرحله ۱ · باد و سرعت"
+    };
 }
 
 
-/* =========================================
-   TIMER
-========================================= */
+/* =========================================================
+   SPAWN SELECTION
+========================================================= */
 
-function startTimer(){
+function chooseClothing(){
 
-    timerInterval = setInterval(() => {
+    /*
+       لباس قرمز عمداً شانس نسبتاً بالایی دارد.
+    */
 
-        timeLeft--;
+    const randomNumber = Math.random();
 
-        timerElement.textContent =
-            timeLeft;
+    if(randomNumber < .22){
 
-        if(timeLeft <= 10){
+        return CLOTHING_TYPES.find(x => x.type === "evil");
 
-            timerElement
-                .classList.add("warning");
+    }
 
-        }
+    if(randomNumber < .32){
 
-        if(timeLeft <= 0){
+        return CLOTHING_TYPES.find(x => x.type === "gold");
 
-            endGame();
+    }
 
-        }
+    const normalItems =
+        CLOTHING_TYPES.filter(x => x.type === "normal");
 
-    },1000);
-
+    return normalItems[
+        Math.floor(Math.random()*normalItems.length)
+    ];
 }
 
 
-/* =========================================
-   SPAWN
-========================================= */
-
-function startSpawning(){
-
-    spawnClothing();
-
-    spawnInterval =
-        setInterval(() => {
-
-            if(gameRunning){
-
-                spawnClothing();
-
-            }
-
-        },850);
-
-}
-
-
-/* =========================================
-   CREATE CLOTHING
-========================================= */
+/* =========================================================
+   SPAWN CLOTHING
+========================================================= */
 
 function spawnClothing(){
 
-    const item =
-        document.createElement("div");
+    if(!gameRunning) return;
 
-    item.className =
-        "clothing";
+    /*
+       برای جلوگیری از شلوغ شدن بیش از حد،
+       همزمان بیشتر از 3 لباس روی صفحه نباشد.
+    */
 
-    const colors = [
-        "gold",
-        "white",
-        "black",
-        "burgundy",
-        "green"
-    ];
+    if(clothes.length >= 3){
+        scheduleNextSpawn();
+        return;
+    }
 
-    const randomColor =
-        colors[
-            Math.floor(
-                Math.random() *
-                colors.length
-            )
-        ];
+    const config = chooseClothing();
 
-    item.classList.add(randomColor);
+    const item = document.createElement("img");
 
-    item.innerHTML = `
+    item.src = config.src;
+    item.className = "clothing";
 
-        <div class="hanger"></div>
+    if(config.size === "small"){
+        item.classList.add("small");
+    }
 
-        <div class="cloth-body"></div>
+    if(config.size === "large"){
+        item.classList.add("large");
+    }
 
-    `;
+    if(config.type === "gold"){
+        item.classList.add("gold");
+    }
 
-    item.dataset.id =
-        clothingId++;
+    if(config.type === "evil"){
+        item.classList.add("evil");
+    }
 
-    const zoneWidth =
-        clothesZone.clientWidth;
+    const startX =
+        random(35, window.innerWidth - 35);
 
-    const maxLeft =
-        Math.max(
-            10,
-            zoneWidth - 80
-        );
+    const startY = -90;
 
-    item.style.left =
-        Math.random() *
-        maxLeft +
-        "px";
+    item.style.left = startX + "px";
+    item.style.top = startY + "px";
 
-    item.style.top =
-        "-90px";
+    gameArea.appendChild(item);
 
-    clothesZone.appendChild(item);
+    const clothing = {
+        el:item,
+        config:config,
+        x:startX,
+        y:startY,
+        startX:startX,
+        drift:random(-.35,.35),
+        rotation:random(-8,8),
+        caught:false,
+        createdAt:performance.now()
+    };
 
-    animateClothing(item);
+    clothes.push(clothing);
 
+    animateClothing(clothing);
+
+    scheduleNextSpawn();
 }
 
 
-/* =========================================
-   CLOTHING FALL
-========================================= */
+/* =========================================================
+   SPAWN TIMER
+========================================================= */
+
+function scheduleNextSpawn(){
+
+    if(!gameRunning) return;
+
+    const difficulty = getDifficulty();
+
+    /*
+       کمی تصادفی بودن باعث می‌شود بازیکن
+       نتواند دقیقاً زمان ظاهر شدن لباس بعدی را حفظ کند.
+    */
+
+    const randomDelay =
+        random(-250,450);
+
+    spawnTimeout = setTimeout(
+        spawnClothing,
+        Math.max(900, difficulty.spawn + randomDelay)
+    );
+}
+
+
+/* =========================================================
+   ANIMATE CLOTHING
+========================================================= */
 
 function animateClothing(item){
 
-    const startTime =
-        performance.now();
+    const started = performance.now();
 
-    const duration =
-        3300 +
-        Math.random() * 1200;
+    const baseFallSpeed =
+        random(95,125) * item.config.speed;
 
-    const startTop = -90;
+    function frame(now){
 
-    const endTop =
-        clothesZone.clientHeight + 30;
-
-    function move(now){
-
-        if(!item.isConnected){
-
+        if(!gameRunning || item.caught){
             return;
+        }
+
+        const elapsed =
+            (now - started) / 1000;
+
+        const difficulty =
+            getDifficulty();
+
+        const windPower =
+            timeLeft <= 15 ? 1 : 0;
+
+        /*
+           سرعت با گذشت زمان بیشتر می‌شود.
+        */
+
+        item.y +=
+            baseFallSpeed *
+            difficulty.speed *
+            .016;
+
+        /*
+           باد در 15 ثانیه آخر
+        */
+
+        if(windPower){
+
+            item.x +=
+                Math.sin(now / 330) *
+                .85;
+
+            item.x += item.drift;
 
         }
 
-        if(!gameRunning){
+        /*
+           کمی حرکت طبیعی لباس
+        */
+
+        const wobble =
+            Math.sin(now / 260 + item.startX) * 7;
+
+        item.el.style.transform =
+            `translate(-50%,0)
+             translateX(${item.x - item.startX + wobble}px)
+             rotate(${item.rotation + Math.sin(now/500)*5}deg)`;
+
+        item.el.style.top =
+            item.y + "px";
+
+        /*
+           برخورد
+        */
+
+        if(checkCollision(item)){
+
+            catchClothing(item);
 
             return;
-
         }
 
-        const progress =
-            Math.min(
-                1,
-                (now - startTime) /
-                duration
-            );
+        /*
+           اگر از پایین خارج شد
+        */
 
-        const currentTop =
-            startTop +
-            (endTop - startTop) *
-            progress;
-
-        item.style.top =
-            currentTop + "px";
-
-        checkCatch(item);
-
-        if(progress >= 1){
+        if(item.y > window.innerHeight + 100){
 
             missClothing(item);
 
             return;
-
         }
 
-        requestAnimationFrame(move);
-
+        requestAnimationFrame(frame);
     }
 
-    requestAnimationFrame(move);
-
+    requestAnimationFrame(frame);
 }
 
 
-/* =========================================
-   CATCH DETECTION
-========================================= */
+/* =========================================================
+   COLLISION
+========================================================= */
 
-function checkCatch(item){
+function checkCollision(item){
 
-    if(!item.isConnected){
-
-        return;
-
-    }
-
-    const itemRect =
-        item.getBoundingClientRect();
-
-    const playerRect =
+    const rackRect =
         player.getBoundingClientRect();
 
-    const itemCenter =
-        itemRect.left +
-        itemRect.width / 2;
+    const clothingRect =
+        item.el.getBoundingClientRect();
 
-    const playerLeft =
-        playerRect.left;
+    /*
+       کمی سخت‌تر از برخورد کامل:
+       لباس باید واقعاً وارد محدوده رگال شود.
+    */
 
-    const playerRight =
-        playerRect.right;
-
-    const playerTop =
-        playerRect.top;
-
-    const playerBottom =
-        playerRect.bottom;
-
-    const verticalHit =
-        itemRect.bottom >= playerTop &&
-        itemRect.top <= playerBottom;
-
-    const horizontalHit =
-        itemCenter >= playerLeft &&
-        itemCenter <= playerRight;
-
-    if(
-        verticalHit &&
-        horizontalHit
-    ){
-
-        catchClothing(item);
-
-    }
-
+    return !(
+        clothingRect.right < rackRect.left + 15 ||
+        clothingRect.left > rackRect.right - 15 ||
+        clothingRect.bottom < rackRect.top + 15 ||
+        clothingRect.top > rackRect.bottom
+    );
 }
 
 
-/* =========================================
-   SUCCESS
-========================================= */
+/* =========================================================
+   CATCH
+========================================================= */
 
 function catchClothing(item){
 
-    if(!item.isConnected){
+    if(item.caught) return;
 
-        return;
+    item.caught = true;
 
-    }
+    score += item.config.value;
 
-    const rect =
-        item.getBoundingClientRect();
+    updateScore();
 
-    createScorePop(
-        "+1",
-        rect.left,
-        rect.top,
-        true
+    showScore(
+        item.el,
+        item.config.value,
+        item.config.type
     );
 
-    item.remove();
-
-    updateScore(1);
-
+    removeClothing(item);
 }
 
 
-/* =========================================
+/* =========================================================
    MISS
-========================================= */
+========================================================= */
 
 function missClothing(item){
 
-    if(!item.isConnected){
+    if(item.caught) return;
 
-        return;
+    item.caught = true;
 
-    }
+    score += MISS_SCORE;
 
-    const rect =
-        item.getBoundingClientRect();
+    updateScore();
 
-    createScorePop(
-        "-5",
-        rect.left,
-        window.innerHeight - 150,
-        false
+    showScore(
+        item.el,
+        MISS_SCORE,
+        "miss"
     );
 
-    item.remove();
-
-    updateScore(-5);
-
+    removeClothing(item);
 }
 
 
-/* =========================================
+/* =========================================================
+   REMOVE
+========================================================= */
+
+function removeClothing(item){
+
+    item.el.remove();
+
+    clothes =
+        clothes.filter(
+            x => x !== item
+        );
+}
+
+
+/* =========================================================
    SCORE
-========================================= */
+========================================================= */
 
-function updateScore(value){
+function updateScore(){
 
-    score += value;
+    scoreEl.textContent = score;
 
-    scoreElement.textContent =
-        score;
+    /*
+       رنگ امتیاز در Header
+    */
 
+    if(score > 0){
+        scoreEl.style.color = "#15803d";
+    }
+
+    if(score < 0){
+        scoreEl.style.color = "#d71920";
+    }
+
+    if(score === 0){
+        scoreEl.style.color = "#111";
+    }
 }
 
 
-/* =========================================
+/* =========================================================
    SCORE POP
-========================================= */
+========================================================= */
 
-function createScorePop(
-    text,
-    x,
-    y,
-    positive
-){
+function showScore(target,value,type){
 
     const pop =
         document.createElement("div");
 
-    pop.className =
-        "score-pop " +
-        (
-            positive
-            ? "plus"
-            : "minus"
-        );
+    pop.className = "score-pop";
+
+    if(type === "evil" || type === "miss"){
+        pop.classList.add("minus");
+    }
+    else if(type === "gold"){
+        pop.classList.add("gold");
+    }
+    else{
+        pop.classList.add("plus");
+    }
 
     pop.textContent =
-        text;
+        value > 0
+            ? "+" + value
+            : value;
+
+    const rect =
+        target.getBoundingClientRect();
 
     pop.style.left =
-        x + "px";
+        rect.left + rect.width/2 + "px";
 
     pop.style.top =
-        y + "px";
+        rect.top + "px";
 
     document.body.appendChild(pop);
 
-    setTimeout(() => {
-
+    setTimeout(()=>{
         pop.remove();
-
-    },800);
-
+    },850);
 }
 
 
-/* =========================================
+/* =========================================================
+   TIMER
+========================================================= */
+
+function startTimer(){
+
+    timerInterval =
+        setInterval(()=>{
+
+            if(!gameRunning) return;
+
+            timeLeft--;
+
+            timerEl.textContent =
+                timeLeft;
+
+            updateDifficulty();
+
+            if(timeLeft <= 15){
+
+                winds.forEach(
+                    wind =>
+                    wind.classList.add("active")
+                );
+
+            }
+
+            if(timeLeft <= 0){
+
+                endGame();
+
+            }
+
+        },1000);
+}
+
+
+/* =========================================================
+   DIFFICULTY UI
+========================================================= */
+
+function updateDifficulty(){
+
+    const difficulty =
+        getDifficulty();
+
+    difficultyEl.textContent =
+        difficulty.label;
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+function startGame(){
+
+    score = 0;
+    timeLeft = GAME_DURATION;
+
+    clothes.forEach(
+        item => item.el.remove()
+    );
+
+    clothes = [];
+
+    updateScore();
+
+    timerEl.textContent =
+        timeLeft;
+
+    difficultyEl.textContent =
+        "مرحله ۱ · آرام";
+
+    winds.forEach(
+        wind =>
+        wind.classList.remove("active")
+    );
+
+    intro.classList.add("hidden");
+    result.classList.add("hidden");
+
+    gameRunning = true;
+    gameStarted = true;
+
+    startTimer();
+
+    scheduleNextSpawn();
+}
+
+
+/* =========================================================
    END
-========================================= */
+========================================================= */
 
 function endGame(){
 
     gameRunning = false;
 
     clearInterval(timerInterval);
+    clearTimeout(spawnTimeout);
 
-    clearInterval(spawnInterval);
+    winds.forEach(
+        wind =>
+        wind.classList.remove("active")
+    );
 
-    document
-        .querySelectorAll(".clothing")
-        .forEach(item => item.remove());
+    clothes.forEach(
+        item =>
+        item.el.remove()
+    );
 
-    finalScore.textContent =
-        score;
+    clothes = [];
 
     if(score >= 15){
 
         resultTitle.textContent =
-            "Level 2 باز شد!";
+            "Level 2 باز شد 🔓";
 
-        resultMessage.innerHTML =
-            "عالی بود. امتیازت به حد لازم رسید.<br>حالا آماده مرحله بعدی شو.";
+        resultText.innerHTML =
+            `
+            امتیاز نهایی شما:
+            <strong>${score}</strong>
+            <br><br>
+            عالی بود.
+            شما به امتیاز لازم برای ورود به مرحله بعد رسیدید.
+            `;
 
-    }else{
+    }
+    else{
 
         resultTitle.textContent =
-            "هنوز تموم نشده.";
+            "هنوز باز نشده";
 
-        resultMessage.innerHTML =
-            "برای باز کردن Level 2 باید حداقل +15 امتیاز بگیری.<br>دوباره امتحان کن.";
-
+        resultText.innerHTML =
+            `
+            امتیاز نهایی شما:
+            <strong>${score}</strong>
+            <br><br>
+            برای باز کردن Level 2
+            باید حداقل به <strong>+15</strong> برسید.
+            `;
     }
 
-    result.classList.add("show");
-
+    result.classList.remove("hidden");
 }
 
 
-/* =========================================
-   RESTART
-========================================= */
-
-function restartGame(){
-
-    result.classList.remove("show");
-
-    startGame();
-
-}
-
-
-/* =========================================
-   BACK
-========================================= */
-
-function goBack(){
-
-    if(
-        confirm(
-            "از بازی خارج می‌شوی؟"
-        )
-    ){
-
-        goHub();
-
-    }
-
-}
-
-
-function goHub(){
-
-    window.location.href =
-        "game.html";
-
-}
-
-
-/* =========================================
-   PLAYER CONTROL
-========================================= */
+/* =========================================================
+   RACK CONTROL
+========================================================= */
 
 let dragging = false;
 
-let playerOffsetX = 0;
+let targetX =
+    window.innerWidth / 2;
+
+let currentX =
+    window.innerWidth / 2;
 
 
-/* MOUSE */
+/*
+   رگال عمداً با تأخیر حرکت می‌کند.
+   یعنی حرکت انگشت/ماوس مستقیم و فوری نیست.
+*/
 
-player.addEventListener(
-    "mousedown",
-    function(e){
+function moveRack(clientX){
 
-        dragging = true;
-
-        player.classList.add(
-            "dragging"
+    targetX =
+        Math.max(
+            75,
+            Math.min(
+                window.innerWidth - 75,
+                clientX
+            )
         );
-
-        const rect =
-            player.getBoundingClientRect();
-
-        playerOffsetX =
-            e.clientX -
-            rect.left;
-
-    }
-);
+}
 
 
-document.addEventListener(
-    "mousemove",
-    function(e){
+/* mouse */
 
-        if(!dragging){
+player.addEventListener("mousedown",()=>{
+    dragging = true;
+    player.classList.add("dragging");
+});
 
-            return;
+window.addEventListener("mouseup",()=>{
+    dragging = false;
+    player.classList.remove("dragging");
+});
 
-        }
+window.addEventListener("mousemove",(e)=>{
 
-        movePlayer(
-            e.clientX
-        );
+    if(!dragging) return;
 
-    }
-);
+    moveRack(e.clientX);
 
-
-document.addEventListener(
-    "mouseup",
-    function(){
-
-        dragging = false;
-
-        player.classList.remove(
-            "dragging"
-        );
-
-    }
-);
+});
 
 
-/* TOUCH */
+/* touch */
 
 player.addEventListener(
     "touchstart",
-    function(e){
+    (e)=>{
 
         dragging = true;
 
         const touch =
             e.touches[0];
 
-        const rect =
-            player.getBoundingClientRect();
-
-        playerOffsetX =
-            touch.clientX -
-            rect.left;
-
-    },
-    {passive:false}
-);
-
-
-document.addEventListener(
-    "touchmove",
-    function(e){
-
-        if(!dragging){
-
-            return;
-
-        }
-
-        e.preventDefault();
-
-        const touch =
-            e.touches[0];
-
-        movePlayer(
+        moveRack(
             touch.clientX
         );
 
     },
-    {passive:false}
+    {passive:true}
 );
 
+window.addEventListener(
+    "touchmove",
+    (e)=>{
 
-document.addEventListener(
+        if(!dragging) return;
+
+        const touch =
+            e.touches[0];
+
+        moveRack(
+            touch.clientX
+        );
+
+    },
+    {passive:true}
+);
+
+window.addEventListener(
     "touchend",
-    function(){
-
+    ()=>{
         dragging = false;
-
     }
 );
 
 
-/* =========================================
-   MOVE PLAYER
-========================================= */
+/* =========================================================
+   RACK SMOOTH / SLOW MOVEMENT
+========================================================= */
 
-function movePlayer(clientX){
+function animateRack(){
 
-    const gameRect =
-        document
-            .querySelector(".game")
-            .getBoundingClientRect();
+    /*
+       این قسمت باعث می‌شود رگال سریعاً
+       به انگشت/ماوس نچسبد.
+    */
 
-    const playerWidth =
-        player.offsetWidth;
+    currentX +=
+        (targetX - currentX) * .075;
 
-    let left =
-        clientX -
-        gameRect.left -
-        playerOffsetX;
+    player.style.left =
+        currentX + "px";
 
-    const min =
-        5;
+    requestAnimationFrame(
+        animateRack
+    );
+}
 
-    const max =
-        gameRect.width -
-        playerWidth -
-        5;
+animateRack();
 
-    left =
-        Math.max(
-            min,
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+startBtn.addEventListener(
+    "click",
+    startGame
+);
+
+replayBtn.addEventListener(
+    "click",
+    startGame
+);
+
+hubBtn.addEventListener(
+    "click",
+    ()=>{
+        window.location.href =
+            "game.html";
+    }
+);
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    ()=>{
+
+        targetX =
             Math.min(
-                max,
-                left
-            )
-        );
+                targetX,
+                window.innerWidth - 75
+            );
 
-    player.style.left =
-        left + "px";
-
-    player.style.transform =
-        "none";
-
-}
-
-
-/* =========================================
-   INITIAL PLAYER
-========================================= */
-
-function positionPlayer(){
-
-    player.style.left =
-        "50%";
-
-    player.style.transform =
-        "translateX(-50%)";
-
-}
-
-positionPlayer();
+    }
+);
 
 </script>
 
