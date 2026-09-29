@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Zhest Mode — Level 2</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+    overflow:hidden;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.8), transparent 30%),
+        linear-gradient(180deg,#f4eee4 0%,#e5d7c2 100%);
+    color:#171717;
+}
+
+/* APP */
+
+.game{
+    width:100%;
+    height:100vh;
+    min-height:600px;
+    position:relative;
+    overflow:hidden;
+}
+
+/* TOP BAR */
+
+.topbar{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    padding:18px 18px 10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:20;
+}
+
+.brand{
+    font-size:12px;
+    letter-spacing:3px;
+    font-weight:700;
+}
+
+.level{
+    font-size:11px;
+    letter-spacing:2px;
+    opacity:.6;
+}
+
+/* HUD */
+
+.hud{
+    position:absolute;
+    top:62px;
+    left:50%;
+    transform:translateX(-50%);
+    width:calc(100% - 36px);
+    max-width:500px;
+    display:flex;
+    justify-content:space-between;
+    z-index:20;
+}
+
+.hud-box{
+    background:rgba(255,255,255,.55);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:14px;
+    padding:9px 15px;
+    min-width:90px;
+    text-align:center;
+}
+
+.hud-label{
+    font-size:9px;
+    letter-spacing:1px;
+    opacity:.55;
+    margin-bottom:4px;
+}
+
+.hud-value{
+    font-size:18px;
+    font-weight:700;
+}
+
+/* TARGET */
+
+.target-area{
+    position:absolute;
+    top:125px;
+    left:50%;
+    transform:translateX(-50%);
+    width:calc(100% - 40px);
+    max-width:500px;
+    text-align:center;
+    z-index:15;
+}
+
+.target-label{
+    font-size:10px;
+    letter-spacing:3px;
+    opacity:.5;
+    margin-bottom:9px;
+}
+
+.target-word{
+    font-size:38px;
+    letter-spacing:9px;
+    font-weight:800;
+    direction:ltr;
+    min-height:48px;
+}
+
+.progress{
+    margin:13px auto 0;
+    height:3px;
+    width:170px;
+    background:rgba(0,0,0,.12);
+    overflow:hidden;
+    border-radius:10px;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:#171717;
+    transition:.25s;
+}
+
+/* PLAY AREA */
+
+.play-area{
+    position:absolute;
+    top:245px;
+    left:0;
+    width:100%;
+    bottom:0;
+    overflow:hidden;
+}
+
+/* LETTER */
+
+.letter{
+    position:absolute;
+    width:58px;
+    height:58px;
+    border-radius:16px;
+
+    background:rgba(255,255,255,.72);
+    border:1px solid rgba(0,0,0,.1);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:22px;
+    font-weight:800;
+
+    direction:ltr;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.08);
+
+    cursor:pointer;
+
+    user-select:none;
+
+    transition:
+        transform .15s,
+        background .15s,
+        opacity .2s;
+}
+
+.letter:hover{
+    transform:scale(1.08);
+}
+
+.letter.correct{
+    background:#171717;
+    color:white;
+    transform:scale(1.2);
+}
+
+.letter.wrong{
+    background:#8d1f1f;
+    color:white;
+    transform:scale(.85);
+}
+
+/* MESSAGE */
+
+.message{
+    position:absolute;
+    left:50%;
+    top:210px;
+    transform:translate(-50%,-50%);
+    z-index:30;
+
+    font-size:13px;
+    font-weight:700;
+
+    opacity:0;
+    pointer-events:none;
+
+    transition:.25s;
+}
+
+.message.show{
+    opacity:1;
+}
+
+/* START */
+
+.start-screen{
+    position:absolute;
+    inset:0;
+    background:rgba(244,238,228,.92);
+    backdrop-filter:blur(15px);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    z-index:50;
+
+    padding:25px;
+}
+
+.start-card{
+    width:100%;
+    max-width:390px;
+    text-align:center;
+}
+
+.start-number{
+    font-size:11px;
+    letter-spacing:4px;
+    opacity:.5;
+    margin-bottom:18px;
+}
+
+.start-title{
+    font-size:38px;
+    font-weight:800;
+    margin-bottom:14px;
+}
+
+.start-text{
+    font-size:13px;
+    line-height:2;
+    color:#555;
+    margin-bottom:28px;
+}
+
+.start-button{
+    width:100%;
+    height:56px;
+    border:none;
+    border-radius:16px;
+    background:#171717;
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.start-button:active{
+    transform:scale(.98);
+}
+
+/* RESULT */
+
+.result-screen{
+    position:absolute;
+    inset:0;
+
+    background:rgba(244,238,228,.96);
+    backdrop-filter:blur(18px);
+
+    display:none;
+    align-items:center;
+    justify-content:center;
+
+    z-index:60;
+
+    padding:25px;
+}
+
+.result-card{
+    width:100%;
+    max-width:390px;
+    text-align:center;
+}
+
+.result-small{
+    font-size:10px;
+    letter-spacing:3px;
+    opacity:.5;
+    margin-bottom:15px;
+}
+
+.result-title{
+    font-size:34px;
+    font-weight:800;
+    margin-bottom:22px;
+}
+
+.final-score{
+    font-size:60px;
+    font-weight:900;
+    margin-bottom:8px;
+}
+
+.result-info{
+    font-size:13px;
+    color:#666;
+    margin-bottom:28px;
+}
+
+.result-buttons{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.result-button{
+    height:52px;
+    border-radius:15px;
+    border:none;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:700;
+}
+
+.primary{
+    background:#171717;
+    color:#fff;
+}
+
+.secondary{
+    background:rgba(0,0,0,.07);
+    color:#171717;
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+
+    .game{
+        max-width:520px;
+        margin:auto;
+        box-shadow:0 0 60px rgba(0,0,0,.12);
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <div class="topbar">
+        <div class="brand">ZHEST MODE</div>
+        <div class="level">LEVEL 02</div>
+    </div>
+
+    <div class="hud">
+
+        <div class="hud-box">
+            <div class="hud-label">SCORE</div>
+            <div class="hud-value" id="score">0</div>
+        </div>
+
+        <div class="hud-box">
+            <div class="hud-label">TIME</div>
+            <div class="hud-value" id="timer">60</div>
+        </div>
+
+        <div class="hud-box">
+            <div class="hud-label">WORD</div>
+            <div class="hud-value">
+                <span id="wordNumber">1</span>/5
+            </div>
+        </div>
+
+    </div>
+
+    <div class="target-area">
+
+        <div class="target-label">
+            BUILD THE WORD
+        </div>
+
+        <div class="target-word" id="targetWord">
+            STYLE
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+    </div>
+
+    <div class="play-area" id="playArea"></div>
+
+    <div class="message" id="message"></div>
+
+
+    <!-- START -->
+
+    <div class="start-screen" id="startScreen">
+
+        <div class="start-card">
+
+            <div class="start-number">
+                ZHEST MODE / 02
+            </div>
+
+            <div class="start-title">
+                WORD<br>BUILDER
+            </div>
+
+            <div class="start-text">
+                حروف درست را به ترتیب انتخاب کن<br>
+                حروف اشتباه امتیازت را کم می‌کنند.
+            </div>
+
+            <button class="start-button" id="startButton">
+                شروع بازی
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div class="result-screen" id="resultScreen">
+
+        <div class="result-card">
+
+            <div class="result-small">
+                ZHEST MODE / LEVEL 02
+            </div>
+
+            <div class="result-title" id="resultTitle">
+                LEVEL COMPLETE
+            </div>
+
+            <div class="final-score" id="finalScore">
+                0
+            </div>
+
+            <div class="result-info" id="resultInfo">
+                امتیاز نهایی
+            </div>
+
+            <div class="result-buttons">
+
+                <button
+                    class="result-button primary"
+                    onclick="restartGame()">
+                    دوباره بازی کن
+                </button>
+
+                <button
+                    class="result-button secondary"
+                    onclick="goBack()">
+                    بازگشت
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   GAME DATA
+========================= */
+
+const words = [
+    "STYLE",
+    "FASHION",
+    "LOOK",
+    "MODE",
+    "ZHest"
+];
+
+const TOTAL_TIME = 60;
+
+const SCORE_CORRECT = 5;
+const SCORE_WRONG = -2;
+
+const MIN_SCORE_TO_UNLOCK = 20;
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let score = 0;
+let timeLeft = TOTAL_TIME;
+
+let currentWordIndex = 0;
+let currentLetterIndex = 0;
+
+let gameRunning = false;
+
+let timerInterval = null;
+let spawnInterval = null;
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const scoreEl =
+    document.getElementById("score");
+
+const timerEl =
+    document.getElementById("timer");
+
+const targetWordEl =
+    document.getElementById("targetWord");
+
+const wordNumberEl =
+    document.getElementById("wordNumber");
+
+const playArea =
+    document.getElementById("playArea");
+
+const messageEl =
+    document.getElementById("message");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const startButton =
+    document.getElementById("startButton");
+
+const resultScreen =
+    document.getElementById("resultScreen");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+const resultTitle =
+    document.getElementById("resultTitle");
+
+const resultInfo =
+    document.getElementById("resultInfo");
+
+
+/* =========================
+   START
+========================= */
+
+startButton.addEventListener(
+    "click",
+    startGame
+);
+
+
+function startGame(){
+
+    startScreen.style.display = "none";
+
+    score = 0;
+    timeLeft = TOTAL_TIME;
+
+    currentWordIndex = 0;
+    currentLetterIndex = 0;
+
+    gameRunning = true;
+
+    updateHUD();
+    loadWord();
+
+    timerInterval = setInterval(
+        updateTimer,
+        1000
+    );
+
+    spawnInterval = setInterval(
+        spawnLetter,
+        650
+    );
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function updateTimer(){
+
+    if(!gameRunning) return;
+
+    timeLeft--;
+
+    timerEl.textContent = timeLeft;
+
+    if(timeLeft <= 0){
+
+        endGame();
+
+    }
+
+}
+
+
+/* =========================
+   LOAD WORD
+========================= */
+
+function loadWord(){
+
+    const word =
+        words[currentWordIndex];
+
+    currentLetterIndex = 0;
+
+    targetWordEl.innerHTML = "";
+
+    for(let i = 0; i < word.length; i++){
+
+        const span =
+            document.createElement("span");
+
+        span.textContent = word[i];
+
+        span.style.opacity =
+            i === 0 ? "1" : ".25";
+
+        targetWordEl.appendChild(span);
+
+    }
+
+    wordNumberEl.textContent =
+        currentWordIndex + 1;
+
+    updateProgress();
+
+}
+
+
+/* =========================
+   SPAWN LETTER
+========================= */
+
+function spawnLetter(){
+
+    if(!gameRunning) return;
+
+    const word =
+        words[currentWordIndex];
+
+    const correctLetter =
+        word[currentLetterIndex];
+
+
+    /*
+      حدود ۵۰٪ مواقع
+      حرف درست می‌آید.
+    */
+
+    let letter;
+
+    if(Math.random() < 0.5){
+
+        letter = correctLetter;
+
+    }else{
+
+        letter = randomWrongLetter();
+
+    }
+
+
+    createLetter(letter);
+
+}
+
+
+/* =========================
+   CREATE LETTER
+========================= */
+
+function createLetter(letter){
+
+    const el =
+        document.createElement("div");
+
+    el.className = "letter";
+
+    el.textContent = letter;
+
+    const maxX =
+        Math.max(
+            10,
+            playArea.clientWidth - 70
+        );
+
+    const maxY =
+        Math.max(
+            20,
+            playArea.clientHeight - 80
+        );
+
+    el.style.left =
+        (10 + Math.random() * maxX) + "px";
+
+    el.style.top =
+        (20 + Math.random() * maxY) + "px";
+
+
+    el.addEventListener(
+        "click",
+        () => handleLetter(el, letter)
+    );
+
+
+    playArea.appendChild(el);
+
+
+    /*
+      حذف خودکار کارت
+    */
+
+    setTimeout(() => {
+
+        if(el.parentNode){
+
+            el.style.opacity = "0";
+
+            setTimeout(() => {
+
+                if(el.parentNode){
+                    el.remove();
+                }
+
+            },200);
+
+        }
+
+    },1800);
+
+}
+
+
+/* =========================
+   HANDLE LETTER
+========================= */
+
+function handleLetter(el, letter){
+
+    if(!gameRunning) return;
+
+    const word =
+        words[currentWordIndex];
+
+    const neededLetter =
+        word[currentLetterIndex];
+
+
+    if(letter === neededLetter){
+
+        /* CORRECT */
+
+        score += SCORE_CORRECT;
+
+        el.classList.add("correct");
+
+        showMessage(
+            "✓ درست"
+        );
+
+
+        currentLetterIndex++;
+
+
+        updateTargetVisual();
+
+        updateProgress();
+
+
+        /*
+          آیا کلمه تمام شده؟
+        */
+
+        if(
+            currentLetterIndex >=
+            word.length
+        ){
+
+            completeWord();
+
+        }
+
+
+    }else{
+
+        /* WRONG */
+
+        score += SCORE_WRONG;
+
+        el.classList.add("wrong");
+
+        showMessage(
+            "−2"
+        );
+
+    }
+
+    updateHUD();
+
+}
+
+
+/* =========================
+   TARGET VISUAL
+========================= */
+
+function updateTargetVisual(){
+
+    const word =
+        words[currentWordIndex];
+
+    const spans =
+        targetWordEl.children;
+
+    for(let i = 0; i < spans.length; i++){
+
+        if(i < currentLetterIndex){
+
+            spans[i].style.opacity = "1";
+
+        }else if(
+            i === currentLetterIndex
+        ){
+
+            spans[i].style.opacity = "1";
+
+        }else{
+
+            spans[i].style.opacity = ".25";
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+function updateProgress(){
+
+    const word =
+        words[currentWordIndex];
+
+    const percent =
+        (currentLetterIndex / word.length) * 100;
+
+    progressBar.style.width =
+        percent + "%";
+
+}
+
+
+/* =========================
+   WORD COMPLETE
+========================= */
+
+function completeWord(){
+
+    score += 10;
+
+    showMessage(
+        "WORD COMPLETE +10"
+    );
+
+    currentWordIndex++;
+
+    /*
+      همه کلمات تمام شده؟
+    */
+
+    if(
+        currentWordIndex >=
+        words.length
+    ){
+
+        endGame();
+
+        return;
+
+    }
+
+
+    setTimeout(() => {
+
+        if(gameRunning){
+
+            loadWord();
+
+        }
+
+    },700);
+
+}
+
+
+/* =========================
+   RANDOM WRONG LETTER
+========================= */
+
+function randomWrongLetter(){
+
+    const letters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    let letter;
+
+    do{
+
+        letter =
+            letters[
+                Math.floor(
+                    Math.random() *
+                    letters.length
+                )
+            ];
+
+    }while(
+        letter ===
+        words[currentWordIndex][
+            currentLetterIndex
+        ]
+    );
+
+    return letter;
+
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function showMessage(text){
+
+    messageEl.textContent = text;
+
+    messageEl.classList.add("show");
+
+    setTimeout(() => {
+
+        messageEl.classList.remove(
+            "show"
+        );
+
+    },500);
+
+}
+
+
+/* =========================
+   HUD
+========================= */
+
+function updateHUD(){
+
+    scoreEl.textContent =
+        score;
+
+    timerEl.textContent =
+        timeLeft;
+
+}
+
+
+/* =========================
+   END GAME
+========================= */
+
+function endGame(){
+
+    gameRunning = false;
+
+    clearInterval(
+        timerInterval
+    );
+
+    clearInterval(
+        spawnInterval
+    );
+
+
+    playArea.innerHTML = "";
+
+
+    finalScore.textContent =
+        score;
+
+
+    if(
+        score >=
+        MIN_SCORE_TO_UNLOCK
+    ){
+
+        resultTitle.textContent =
+            "LEVEL COMPLETE";
+
+        resultInfo.textContent =
+            "Level 3 برای شما باز شد.";
+
+        localStorage.setItem(
+            "zhest_level2_unlocked",
+            "true"
+        );
+
+    }else{
+
+        resultTitle.textContent =
+            "TRY AGAIN";
+
+        resultInfo.textContent =
+            "برای باز کردن Level 3 حداقل 20 امتیاز لازم است.";
+
+    }
+
+
+    resultScreen.style.display =
+        "flex";
+
+}
+
+
+/* =========================
+   RESTART
+========================= */
+
+function restartGame(){
+
+    resultScreen.style.display =
+        "none";
+
+    startScreen.style.display =
+        "none";
+
+    startGame();
+
+}
+
+
+/* =========================
+   BACK
+========================= */
+
+function goBack(){
+
+    window.location.href =
+        "game.html";
+
+}
+
+</script>
+
+</body>
+</html>
